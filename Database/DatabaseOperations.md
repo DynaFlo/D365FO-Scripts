@@ -1,15 +1,23 @@
 **Database powerShell scripts**
 
-- [Database import](#import-lcs-bacpac-to-environnement-tier-1)
-  - [Database size](#database-size)
-  - [System statistics](#system-statistics)
-  - [SQL Agent jobs](#sql-agent-jobs)
-  - [Table statistics](#table-statistics)
-  - [sp_Blitz](#sp_blitz)
-- [Review database status](#review-database-status)
+- [Import Lcs bacpac to environnement Tier 1](#import-lcs-bacpac-to-environnement-tier-1)
+  - [Get-LCS Token and set Config ](#get-lcs-token-and-set-config )
+  - [Database import](#database-import)
 
 
 # Import Lcs bacpac to environnement Tier 1
+
+## Get-LCS Token and set Config 
+
+$clientId of registred application with Dynamics Lifecycle services authorization
+
+```powershell
+$clientId = ""
+$userName = "YourUserMail"
+$passWord = 'YourPassword'
+
+Get-D365LcsApiToken -ClientId $clientId -Username $userName -Password $passWord -LcsApiUri "https://lcsapi.lcs.dynamics.com" -Verbose | Set-D365LcsApiConfig -ProjectId $projectId -ClientId $clientId
+```
 
 ## Database import
 
@@ -43,11 +51,10 @@ $d365user = Get-D365User
 
 foreach ($user in $d365user)
 {
-if ($user.email -match "silverprod")
-{
-Update-D365User -Email $user.email
-Write-Host $user.Email
-}
-
+  if ($user.email -match "silverprod")
+  {
+    Update-D365User -Email $user.email
+    Write-Host $user.Email
+  }
 }
 ```
