@@ -22,7 +22,7 @@ Get-D365LcsApiToken -ClientId $clientId -Username $userName -Password $passWord 
 ## Database import
 
 ```powershell
-$currentDate = Get-Date -Format yyyymmdd
+$currentDate = Get-Date -Format yyyyMMdd
 $bacpacName = "UAT{0}" -f $currentDate
 $downloadPath = "D:\UAT{0}.bacpac" -f $currentDate
 $newDBName = "AxDB_{0}" -f $currentDate
