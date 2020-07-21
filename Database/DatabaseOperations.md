@@ -58,3 +58,51 @@ foreach ($user in $d365user)
   }
 }
 ```
+# Import Backup to environnement Tier 1
+
+## Restore SQL Script
+``` SQL
+USE [master]
+
+DECLARE @backupFile nvarchar(100) = N'C:\Temp\AxDB.bak'
+DECLARE @toMdf varchar(1000) = N'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\AxDB_' + CONVERT(nvarchar,(CONVERT (date,getdate()))) + '_Primary.mdf'
+DECLARE @toLdf varchar(1000) = N'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\AxDB_' + CONVERT(nvarchar,(CONVERT (date,getdate()))) + '_Primary.ldf'
+DECLARE @toAxDBName nvarchar(20) = 'AxDB_' + CONVERT(nvarchar,CONVERT (date,getdate()))
+
+DECLARE @logicalNameMdf NVARCHAR(128)
+DECLARE @logicalNameLdf NVARCHAR(128)
+
+DECLARE @fileListTable TABLE (
+    [LogicalName]           NVARCHAR(128),
+    [PhysicalName]          NVARCHAR(260),
+    [Type]                  CHAR(1),
+    [FileGroupName]         NVARCHAR(128),
+    [Size]                  NUMERIC(20,0),
+    [MaxSize]               NUMERIC(20,0),
+    [FileID]                BIGINT,
+    [CreateLSN]             NUMERIC(25,0),
+    [DropLSN]               NUMERIC(25,0),
+    [UniqueID]              UNIQUEIDENTIFIER,
+    [ReadOnlyLSN]           NUMERIC(25,0),
+    [ReadWriteLSN]          NUMERIC(25,0),
+    [BackupSizeInBytes]     BIGINT,
+    [SourceBlockSize]       INT,
+    [FileGroupID]           INT,
+    [LogGroupGUID]          UNIQUEIDENTIFIER,
+    [DifferentialBaseLSN]   NUMERIC(25,0),
+    [DifferentialBaseGUID]  UNIQUEIDENTIFIER,
+    [IsReadOnly]            BIT,
+    [IsPresent]             BIT,
+    [TDEThumbprint]         VARBINARY(32),
+	[SnapshotUrl]			NVARCHAR(260)
+)
+INSERT INTO @fileListTable EXEC('RESTORE FILELISTONLY FROM DISK = ''' + @backupFile + '''')
+SELECT @logicalNameMdf = LogicalName FROM @fileListTable where Type = 'D'
+SELECT @logicalNameLdf = LogicalName FROM @fileListTable where Type = 'L'
+
+RESTORE DATABASE @toAxDBName FROM  DISK = @backupFile WITH  FILE = 1,  MOVE @logicalNameMdf TO @toMdf,  MOVE @logicalNameLdf TO @toLdf,  NOUNLOAD,  STATS = 5
+
+GO
+```
+
+
