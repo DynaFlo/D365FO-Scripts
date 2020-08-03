@@ -1,13 +1,12 @@
-**Database powerShell scripts**
+# Database powerShell scripts
 
 - [Import Lcs bacpac to environnement Tier 1](#import-lcs-bacpac-to-environnement-tier-1)
-  - [Get-LCS Token and set Config ](#get-lcs-token-and-set-config )
+  - [Get-LCS Token and set Config](#get-lcs-token-and-set-config )
   - [Database import](#database-import)
 
+## Import Lcs bacpac to environnement Tier 1
 
-# Import Lcs bacpac to environnement Tier 1
-
-## Get-LCS Token and set Config 
+### Get-LCS Token and set Config
 
 $clientId of registred application with Dynamics Lifecycle services authorization
 
@@ -19,7 +18,7 @@ $passWord = 'YourPassword'
 Get-D365LcsApiToken -ClientId $clientId -Username $userName -Password $passWord -LcsApiUri "https://lcsapi.lcs.dynamics.com" -Verbose | Set-D365LcsApiConfig -ProjectId $projectId -ClientId $clientId
 ```
 
-## Database import
+### Database import
 
 ```powershell
 $currentDate = Get-Date -Format yyyyMMdd
@@ -58,9 +57,11 @@ foreach ($user in $d365user)
   }
 }
 ```
-# Import Backup to environnement Tier 1
 
-## Restore SQL Script
+## Import Backup to environnement Tier 1
+
+### Restore SQL Script
+
 ``` SQL
 USE [master]
 
@@ -94,7 +95,7 @@ DECLARE @fileListTable TABLE (
     [IsReadOnly]            BIT,
     [IsPresent]             BIT,
     [TDEThumbprint]         VARBINARY(32),
-	[SnapshotUrl]			NVARCHAR(260)
+    [SnapshotUrl]           NVARCHAR(260)
 )
 INSERT INTO @fileListTable EXEC('RESTORE FILELISTONLY FROM DISK = ''' + @backupFile + '''')
 SELECT @logicalNameMdf = LogicalName FROM @fileListTable where Type = 'D'
@@ -104,5 +105,3 @@ RESTORE DATABASE @toAxDBName FROM  DISK = @backupFile WITH  FILE = 1,  MOVE @log
 
 GO
 ```
-
-
