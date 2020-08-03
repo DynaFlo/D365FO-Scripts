@@ -43,11 +43,10 @@ $d365user = Get-D365User
 
 foreach ($user in $d365user)
 {
-if ($user.email -match "silverprod")
-{
-Update-D365User -Email $user.email
-Write-Host $user.Email
-}
-
+    if ($user.email -match "silverprod")
+    {
+        Update-D365User -Email $user.email
+        Write-Host $user.Email
+    }
 }
 ```
