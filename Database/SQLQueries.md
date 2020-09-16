@@ -1,0 +1,8 @@
+# SQL Queries
+
+## Find enums values
+
+``` SQL
+SELECT * from ENUMVALUETABLE inner join ENUMIDTABLE on ENUMIDTABLE.ID = ENUMVALUETABLE.ENUMID
+ where ENUMIDTABLE.NAME = 'NAME_OF_ENUM'
+```
