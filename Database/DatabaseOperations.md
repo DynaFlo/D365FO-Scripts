@@ -26,38 +26,49 @@ $bacpacName = "UAT{0}" -f $currentDate
 $downloadPath = "D:\UAT{0}.bacpac" -f $currentDate
 $newDBName = "AxDB_{0}" -f $currentDate
 
-Get-D365LcsApiConfig | Invoke-D365LcsApiRefreshToken | Set-D365LcsApiConfig
-
-$backups = Get-D365LcsDatabaseBackups
-
-$fileLocation = $backups[0].FileLocation
-
-Invoke-D365AzCopyTransfer -SourceUri $fileLocation -DestinationUri $downloadPath
-
-Import-D365Bacpac -ImportModeTier1 -BacpacFile $downloadPath -NewDatabaseName $newDBName
-
-Invoke-D365DbSync -DatabaseName $newDBName
-
-Stop-D365Environment
-
-$destSuffix = "_OLD_" + $currentDate
-
-Switch-D365ActiveDatabase -NewDatabaseName $newDBName -DestinationSuffix $destSuffix
-
-Start-D365Environment
-
-$d365user = Get-D365User
-
-foreach ($user in $d365user)
+If (!(Test-Path D:))
 {
-  if ($user.email -match "silverprod")
-  {
-    Update-D365User -Email $user.email
-    Write-Host $user.Email
-  }
+    $downloadPath = "C:\temp\UAT{0}.bacpac" -f $currentDate
 }
 
-Write-Output "Process done"
+
+Get-D365LcsApiConfig | Invoke-D365LcsApiRefreshToken | Set-D365LcsApiConfig
+
+$config = Get-D365LcsApiConfig | select projectid
+
+If ($config.projectid -ne 0)
+{
+    $backups = Get-D365LcsDatabaseBackups
+
+    $fileLocation = $backups[0].FileLocation
+
+    Invoke-D365AzCopyTransfer -SourceUri $fileLocation -DestinationUri $downloadPath
+
+    Import-D365Bacpac -ImportModeTier1 -BacpacFile $downloadPath -NewDatabaseName $newDBName
+
+    Invoke-D365DbSync -DatabaseName $newDBName
+
+    Stop-D365Environment
+
+    $destSuffix = "_OLD_" + $currentDate
+
+    Switch-D365ActiveDatabase -NewDatabaseName $newDBName -DestinationSuffix $destSuffix
+
+    Start-D365Environment
+
+    $d365user = Get-D365User
+
+    foreach ($user in $d365user)
+    {
+      if ($user.email -match "silverprod")
+      {
+        Update-D365User -Email $user.email
+        Write-Host $user.Email
+      }
+    }
+
+    Write-Output "Process done"
+}
 ```
 
 ## Import Backup to environnement Tier 1
