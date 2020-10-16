@@ -56,6 +56,8 @@ foreach ($user in $d365user)
     Write-Host $user.Email
   }
 }
+
+Write-Output "Process done"
 ```
 
 ## Import Backup to environnement Tier 1
