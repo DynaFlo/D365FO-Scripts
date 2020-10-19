@@ -14,6 +14,7 @@ $clientId of registred application with Dynamics Lifecycle services authorizatio
 $clientId = ""
 $userName = "YourUserMail"
 $passWord = 'YourPassword'
+$projectId = "CustomerProjectId"
 
 Get-D365LcsApiToken -ClientId $clientId -Username $userName -Password $passWord -LcsApiUri "https://lcsapi.lcs.dynamics.com" -Verbose | Set-D365LcsApiConfig -ProjectId $projectId -ClientId $clientId
 ```
