@@ -105,3 +105,11 @@ RESTORE DATABASE @toAxDBName FROM  DISK = @backupFile WITH  FILE = 1,  MOVE @log
 
 GO
 ```
+
+## BACPAC Export failing with Unable to reconnect - Timeout expired
+
+Use the following registry key to set the query timeout for the BACPAC export:
+
+``` REGEDIT
+HKEY_CURRENT_USER\Software\Microsoft\VisualStudio\10.0\SQLDB\Database\QueryTimeoutSeconds (REG_DWORD)
+```
