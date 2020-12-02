@@ -84,10 +84,10 @@ class ERDocuSubscriptionSample
 {
 
 
-    const str azureStorageAccount   = 'fjstorageaccount';
-    const str azureStorageKey       = '6UJdCqFzyZSH1N+nlF8/SFK1rB1yQ9MKIr5PmAECsOBMpYBtpim5Mf1gpZ/oH7Doz0lOYhq1XxuzY7IupmSuTw==';
-    const str azureFileShare        = 'sharetest';
-    const str azureFileDirectory    = 'folder';
+    const str azureStorageAccount   = 'storageaccountname';
+    const str azureStorageKey       = 'puttheprimarykeyhere';
+    const str azureFileShare        = 'sharetest';  // name of File share on azure storage
+    const str azureFileDirectory    = 'folder';     // Folder name in root file share
 
 
     [SubscribesTo(classStr(ERDocuManagementEvents),
