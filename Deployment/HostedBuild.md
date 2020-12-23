@@ -4,7 +4,7 @@
 
 ### Get LCS assets
 
-![LCS Assets Package Nuget](./../images/LCSPackageNuget.png)
+![LCS Assets Package Nuget](./../Images/LCSPackageNuget.png)
 
 ### Upload Nuget Package to feed
 
