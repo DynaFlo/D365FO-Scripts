@@ -4,7 +4,9 @@
 
 ### Get LCS assets
 
-### Upload Nuget Package ot feed
+![GitHub Logo](/images/LCSPackageNuget.png)
+
+### Upload Nuget Package to feed
 
 ### Update package.config on Devops repository
 
