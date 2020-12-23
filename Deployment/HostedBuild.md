@@ -4,9 +4,15 @@
 
 ### Get LCS assets
 
-![GitHub Logo](/images/LCSPackageNuget.png)
+![LCS Assets Package Nuget](./../images/LCSPackageNuget.png)
 
 ### Upload Nuget Package to feed
+
+``` PowerShell
+.\nuget.exe push -Source "GMTBuildD365FO" -ApiKey az "C:\temp\nuget\microsoft.dynamics.ax.application.devalm.buildxpp.10.0.644.10018.nupkg"
+.\nuget.exe push -Source "GMTBuildD365FO" -ApiKey az "C:\temp\nuget\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.5816.35654.nupkg"
+.\nuget.exe push -Source "GMTBuildD365FO" -ApiKey az "C:\temp\nuget\Microsoft.Dynamics.AX.Platform.DevALM.BuildXpp.7.0.5816.35654.nupkg"
+```
 
 ### Update package.config on Devops repository
 
