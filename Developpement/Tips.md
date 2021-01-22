@@ -16,3 +16,9 @@ public static AmountCur getAmountFromString(str amountStr)
     return amount;
 }
 ```
+
+## Unlock MainAccount Suppression
+
+``` X++
+DimensionAttributeValue::updateForEntityValueDelete(MainAccount::findByMainAccountId('21000000'));
+```
