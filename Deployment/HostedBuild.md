@@ -28,12 +28,18 @@ Execute de script with "-AddNetfx" parameters
 ./installcredprovider.ps1 -AddNetfx
 ```
 
+Si necessaire utiliser la commande suivante pour bypasser le message d'erreur
+```
+Set-ExecutionPolicy Bypass -Scope Process -Force;
+```
+
 ### Upload Nuget Package to feed
 
 ``` PowerShell
-.\nuget.exe push -Source "XXXBuildD365FO" -ApiKey az "C:\temp\nuget\microsoft.dynamics.ax.application.devalm.buildxpp.10.0.644.10018.nupkg"
-.\nuget.exe push -Source "XXXBuildD365FO" -ApiKey az "C:\temp\nuget\Microsoft.Dynamics.AX.Platform.CompilerPackage.7.0.5816.35654.nupkg"
-.\nuget.exe push -Source "XXXBuildD365FO" -ApiKey az "C:\temp\nuget\Microsoft.Dynamics.AX.Platform.DevALM.BuildXpp.7.0.5816.35654.nupkg"
+.\nuget.exe push -Source "BuildD365FO" -ApiKey az "Microsoft.Dynamics.AX.Application.DevALM.BuildXpp.nupkg"
+.\nuget.exe push -Source "BuildD365FO" -ApiKey az "Microsoft.Dynamics.AX.ApplicationSuite.DevALM.BuildXpp.nupkg"
+.\nuget.exe push -Source "BuildD365FO" -ApiKey az "Microsoft.Dynamics.AX.Platform.CompilerPackage.nupkg"
+.\nuget.exe push -Source "BuildD365FO" -ApiKey az "Microsoft.Dynamics.AX.Platform.DevALM.BuildXpp.nupkg"
 ```
 
 ### Update package.config on Devops repository
