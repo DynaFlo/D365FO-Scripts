@@ -1,66 +1,70 @@
-
-Impression Zebra en X++
+# Impression Zebra en X++
 Dernière modification : 18/12/2020
-Contexte
+## Contexte
 Dans le cadre du projet Tréfilunion, nous avons rencontré une problématique d'impression d'étiquettes sur des imprimantes Zebra
  
 Plusieurs options ont été étudiées :
-Génération d'un état SSRS contenant l'étiquette
-Option 1 : Impression via un logiciel tiers (à définir) capable de transformer l'impression au format ZPL
-Option 2 : Impression via un Driver Zebra capable de transformer l'impression au format ZPL
-Option 3 : Impression en PDF direct sur imprimante Zebra equipée Link OS
-Envoi via webservice via une solution externe type Bartender ou CodeSoft/sentinel
-Impression via X++ en ZPL
+* Génération d'un état SSRS contenant l'étiquette
+    1. Option 1 : Impression via un logiciel tiers (à définir) capable de transformer l'impression au format ZPL
+    2. Option 2 : Impression via un Driver Zebra capable de transformer l'impression au format ZPL
+    3. Option 3 : Impression en PDF direct sur imprimante Zebra equipée Link OS
+* Envoi via webservice via une solution externe type Bartender ou CodeSoft/sentinel
+* Impression via X++ en ZPL
  
 C'est la troisième solution d'impression en ZPL via X++ qui a été retenue.
  
 La partie la plus technique concernait l'impression de Logos sur l'étiquette, une classe a été développée pour traiter ce point. (Voir plus bas)
  
 Ci-dessus une description des points principaux utilisés pour la mise en oeuvre de cette impression
-Fonction d'impression Zebra
+## Fonction d'impression Zebra
 Il existe une fonction standard permettant d'imprimer une chaine de texte "ZPL" directement sur une imprimante Zebra.
 Cette imprimante aura été au préalable paramétrée via le DRA (Document Routing Agent)
  
 Commande X++ :
+```
 WHSDocumentRouting::printLabelToPrinter(PrinterName, ZPL);
+```
  
-Masque d'impression
+## Masque d'impression
 Pour le stockage des masques d'impression nous nous sommes appuyé sur le standard de la gestion d’entrepôt.
 Ecran  « Gestion des entrepôts > Paramétrage > Acheminement de document > Mises en page de l'acheminement de document » :
 
 
  
  
-Classe d'impression d'images
-Description
+## Classe d'impression d'images
+### Description
 Une classe SICSysZPLImageConverter permettant de convertir une image au format exploitable en ZPL à été développée.
 Cette classe permet de convertir une image BMP, JPG, etc  au format ZPL (balise GFA)
 Elle permet également
-la compression
-la rotation
-le redimensionnement de l'image en conservant le rapport H/L.
+* la compression
+* la rotation
+* le redimensionnement de l'image en conservant le rapport H/L.
  
  
-Exemple d'utilisation de SICSysZplImageConverter :
- 
-        SICSysZPLImageConverter imageConverter = new SICSysZPLImageConverter();
-  
-        imageConverter.setCompressHex(true);
-        imageConverter.setBlacknessLimitPercentage(50);
-        
-        if (sicProdParameters.LabelLogoRotate)
-        {​​​​​​
-            imageConverter.parmRotateType(System.Drawing.RotateFlipType::Rotate90FlipNone);
-        }​​​​​​
-        imageConverter.parmNewWidth(sicProdParameters.LabelLogoCompanyWidth);
-        imageConverter.parmNewHeight(sicProdParameters.LabelLogoCompanyHeight);
+### Exemple d'utilisation de SICSysZplImageConverter :
 
-        logoStr = imageConverter.getGraphicFieldContainer(companyImage.Image);
+```
+SICSysZPLImageConverter imageConverter = new SICSysZPLImageConverter();
+
+imageConverter.setCompressHex(true);
+imageConverter.setBlacknessLimitPercentage(50);
+
+if (sicProdParameters.LabelLogoRotate)
+{
+    imageConverter.parmRotateType(System.Drawing.RotateFlipType::Rotate90FlipNone);
+}
+imageConverter.parmNewWidth(sicProdParameters.LabelLogoCompanyWidth);
+imageConverter.parmNewHeight(sicProdParameters.LabelLogoCompanyHeight);
+
+logoStr = imageConverter.getGraphicFieldContainer(companyImage.Image);
+```
  
  
  
-Classe SICSysZPLImageConverter :
- 
+### Classe SICSysZPLImageConverter :
+
+```
 /// <summary>
 ///        Image to ZPL converter class
 /// </summary>
@@ -471,34 +475,35 @@ public class SICSysZPLImageConverter
     }​​
 
 }​​
+```
  
- 
-Origine du code de la classe
+### Origine du code de la classe
  
 Cette classe est le résultat d'une conversion Java vers X++ du code disponible ici :
 http://www.jcgonzalez.com/java-image-to-zpl-example
  
 Elle a été améliorée pour gérer la rotation et le redimensionnement des images.
-Test du ZPL
+## Test du ZPL
 Simulation d'impression
 Pour tester sans imprimante Zebra un site web qui permet de simuler l'impression et d'avoir un rendu visuel :
  
 http://labelary.com/viewer.html
  
-Upload pour test
+### Upload pour test
  
 Nous avons aussi développé un paramètre d'URL debug pour permettre d'uploader le fichier d'impresssion ZPL et simplifier les tests. A rajouter dans l'URL "&debug=true"
  
-Paramètre d'URL :
+### Paramètre d'URL :
+```
 // for debugging purpose send file when debug URL parameter is set to any value
 debug = System.Web.HttpUtility::ParseQueryString(URLUtility::getUrl()).Get('debug');
 if (debug)
 {​​​
     this.uploadZPLFileToUser(ZPL);
 }​​​​​​​​​​
- 
-Fonction d'upload :
- 
+```
+### Fonction d'upload :
+```
 private void uploadZPLFileToUser(str _ZPL)
 {​​​​​​​​​​
     utcdatetime curDateTime = DateTimeUtil::utcNow();
@@ -511,21 +516,24 @@ private void uploadZPLFileToUser(str _ZPL)
     curDateTime = DateTimeUtil::applyTimeZoneOffset(curDateTime, DateTimeUtil::getClientMachineTimeZone());
 
     File::SendFileToUser(stream, strFmt('ZPLPFSF_%1.txt',DateTimeUtil::toStr(curDateTime)));
-}​​​​​​​​​​
-Rendu final
+}
+```
+## Rendu final
 Pour information voici le rendu final d'une des étiquettes imprimées via X++ :
  
-Langage ZPL
+## Langage ZPL
 
  
 Manuel ZPL
  
 https://www.zebra.com/content/dam/zebra/manuals/printers/common/programming/zpl-zbi2-pm-en.pdf
  
-Tips:
+### Tips:
 Caractères spéciaux :
 Pour gérer la caractères spéciaux et accentués ("°é`è@" ... ), utiliser la commande CI28 pour que l'interprétation soit gérée en UTF8 au début du fichier ZPL : 
+```
 ^FX Use UTF-8
 ^CI28
+```
  
 
