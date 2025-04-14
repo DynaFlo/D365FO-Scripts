@@ -1,5 +1,17 @@
 # Tips for VMS
 
+## Password 
+
+To decrypt run this command:
+
+C:\AOSService\webroot\bin\Microsoft.Dynamics.AX.Framework.ConfigEncryptor.exe -decrypt C:\AOSService\webroot\web.config
+
+
+To encrypt run this command:
+
+C:\AOSService\webroot\bin\Microsoft.Dynamics.AX.Framework.ConfigEncryptor.exe -encrypt C:\AOSService\webroot\web.config
+
+
 ## Erreur ERR_HTTP2_INADEQUATE_TRANSPORT_SECURITY
 
 Désactiver HTTP2 sur IIS avec la clé de registre suivante
