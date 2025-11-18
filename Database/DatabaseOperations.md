@@ -3,6 +3,7 @@
 - [Import Lcs bacpac to environnement Tier 1](#import-lcs-bacpac-to-environnement-tier-1)
   - [Get-LCS Token and set Config](#get-lcs-token-and-set-config )
   - [Database import](#database-import)
+- [Reduce database]
 
 ## Import Lcs bacpac to environnement Tier 1
 
@@ -127,3 +128,8 @@ Use the following registry key to set the query timeout for the BACPAC export:
 ``` REGEDIT
 HKEY_CURRENT_USER\Software\Microsoft\VisualStudio\10.0\SQLDB\Database\QueryTimeoutSeconds (REG_DWORD)
 ```
+
+## Reduce Database Size 
+
+https://github.com/microsoft/BA-CSA-Assets/blob/main/Samples/Dynamics365/FO/SQL/SandboxStorageReduction/README.md
+
